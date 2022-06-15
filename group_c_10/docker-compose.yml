@@ -1,0 +1,53 @@
+version: '3'
+services:
+  gateway:
+    build:
+      context: .
+      dockerfile: src/main/java/gateway/Dockerfile
+    container_name: 'gateway'
+    depends_on:
+      - "sensor1"
+      - "sensor2"
+      - "sensor3"
+      - "server"
+    entrypoint: ["java","-classpath", "target/classes/", "gateway/Main", "500","server","sensor1","1234","sensor2","1235","sensor3","1236"]
+  sensor1:
+    build:
+      context: .
+      dockerfile: src/main/java/sensor/Dockerfile
+    container_name: 'sensor1'
+    expose:
+      - "1234"
+    ports:
+      - "1234:1234"
+    entrypoint: ["java","-classpath", "target/classes/", "sensor/Main","%","HumiditySensor","1234"]
+  sensor2:
+    build:
+      context: .
+      dockerfile: src/main/java/sensor/Dockerfile
+    container_name: 'sensor2'
+    expose:
+      - "1235"
+    ports:
+      - "1235:1235"
+    entrypoint: [ "java","-classpath", "target/classes/", "sensor/Main","lm","BrightnessSensor","1235"]
+  sensor3:
+    build:
+      context: .
+      dockerfile: src/main/java/sensor/Dockerfile
+    container_name: 'sensor3'
+    expose:
+      - "1236"
+    ports:
+      - "1236:1236"
+    entrypoint: [ "java","-classpath", "target/classes/", "sensor/Main","°C","TemperatureSensor","1236"]
+  server:
+    build:
+      context: .
+      dockerfile: src/main/java/server/Dockerfile
+    container_name: 'server'
+    expose:
+      - "80"
+    ports:
+      - "80:80"
+    entrypoint: ["java","-classpath","target/classes/","server/Main"]

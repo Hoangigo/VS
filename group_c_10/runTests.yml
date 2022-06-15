@@ -1,0 +1,14 @@
+version: '3'
+services:
+  gateway:
+    depends_on:
+      - sensor1
+    entrypoint: ["mvn","test"]
+  sensor1:
+    entrypoint: ["mvn","test"]
+  sensor2:
+    entrypoint: ["echo","not included in test!"]
+  sensor3:
+    entrypoint: ["echo","not included in test!"]
+  server:
+    entrypoint: ["mvn","test"]
